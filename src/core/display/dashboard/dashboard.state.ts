@@ -1,4 +1,4 @@
-import type { Investigator } from '@game-rules/investigator';
+import type { Investigator } from '@game-rules/index';
 import { match } from 'ts-pattern';
 import { DashboardAction, type DashboardActions } from './dashboard.action';
 import { DashboardCommand, type DashboardCommands } from './dashboard.command';

@@ -1,22 +1,39 @@
-import { type Investigator, isInvestigator } from '@game-rules/investigator';
+import { type Investigator, isInvestigator } from '@game-rules/index';
 
 export const INVESTIGATORS_STORAGE_KEY = 'coc-character-creation:investigators';
 
+// Bump when the stored shape changes; data saved under another version reads as empty.
+export const INVESTIGATORS_STORAGE_VERSION = 1;
+
+type StoredInvestigators = {
+  version: typeof INVESTIGATORS_STORAGE_VERSION;
+  investigators: Investigator[];
+};
+
 export type UpsertInvestigatorRequest = Omit<Investigator, 'id'> & { id?: string };
 
+const isCurrentVersion = (value: unknown): value is { investigators: unknown[] } =>
+  typeof value === 'object' &&
+  value !== null &&
+  (value as StoredInvestigators).version === INVESTIGATORS_STORAGE_VERSION &&
+  Array.isArray((value as StoredInvestigators).investigators);
+
+// Missing, unparsable or other-version data reads as no investigators; malformed entries are skipped.
 const readAll = (): Investigator[] => {
   const raw = localStorage.getItem(INVESTIGATORS_STORAGE_KEY);
   if (raw === null) return [];
   try {
     const stored: unknown = JSON.parse(raw);
-    return Array.isArray(stored) ? stored.filter(isInvestigator) : [];
+    return isCurrentVersion(stored) ? stored.investigators.filter(isInvestigator) : [];
   } catch {
     return [];
   }
 };
 
-const writeAll = (investigators: Investigator[]) =>
-  localStorage.setItem(INVESTIGATORS_STORAGE_KEY, JSON.stringify(investigators));
+const writeAll = (investigators: Investigator[]) => {
+  const stored: StoredInvestigators = { version: INVESTIGATORS_STORAGE_VERSION, investigators };
+  localStorage.setItem(INVESTIGATORS_STORAGE_KEY, JSON.stringify(stored));
+};
 
 export const InvestigatorDataGateway = {
   getInvestigators: async (): Promise<Investigator[]> => readAll(),

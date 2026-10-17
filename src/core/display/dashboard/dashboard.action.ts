@@ -1,5 +1,5 @@
 import { defineTagged, type TaggedUnionOf } from '@core/common/entities/tagged';
-import type { Investigator } from '@game-rules/investigator';
+import type { Investigator } from '@game-rules/index';
 
 export const DashboardAction = defineTagged({
   startGetInvestigators: () => ({}),

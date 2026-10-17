@@ -1,4 +1,5 @@
 import { createFakeDatagateways, renderWithProviders } from '@client/test-utils';
+import { createTestInvestigator } from '@game-rules/index';
 import { screen } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import { Route, Routes } from 'react-router';
@@ -16,8 +17,8 @@ describe('Dashboard', () => {
   it('lists saved investigators as links to their details', async () => {
     renderWithProviders(<Dashboard />, {
       datagateways: createFakeDatagateways([
-        { id: '1', name: 'Harvey Walters' },
-        { id: '2', name: 'Lydia Lau' },
+        createTestInvestigator({ id: '1', name: 'Harvey Walters' }),
+        createTestInvestigator({ id: '2', name: 'Lydia Lau' }),
       ]),
     });
 

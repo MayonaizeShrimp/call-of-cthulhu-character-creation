@@ -1,9 +1,9 @@
 import { DashboardCommand } from '@core/display/dashboard';
-import type { Investigator } from '@game-rules/investigator';
+import { createTestInvestigator, type Investigator } from '@game-rules/index';
 import { describe, expect, it } from 'vitest';
 import { createDashboardStore } from './Dashboard.store';
 
-const investigators: Investigator[] = [{ id: '1', name: 'Harvey Walters' }];
+const investigators: Investigator[] = [createTestInvestigator({ id: '1', name: 'Harvey Walters' })];
 
 describe('createDashboardStore', () => {
   it('starts from the initial dashboard state', () => {

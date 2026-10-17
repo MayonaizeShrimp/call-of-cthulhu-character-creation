@@ -1,4 +1,4 @@
-import type { Investigator } from '@game-rules/investigator';
+import type { Investigator } from '@game-rules/index';
 import { render } from '@testing-library/react';
 import type { ReactElement } from 'react';
 import { MemoryRouter } from 'react-router';

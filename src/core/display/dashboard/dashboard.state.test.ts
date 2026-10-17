@@ -1,10 +1,10 @@
-import type { Investigator } from '@game-rules/investigator';
+import { createTestInvestigator, type Investigator } from '@game-rules/index';
 import { describe, expect, it } from 'vitest';
 import { DashboardAction } from './dashboard.action';
 import { DashboardCommand } from './dashboard.command';
 import { dashboardReducer, initializeDashboardState } from './dashboard.state';
 
-const investigators: Investigator[] = [{ id: '1', name: 'Harvey Walters' }];
+const investigators: Investigator[] = [createTestInvestigator({ id: '1', name: 'Harvey Walters' })];
 
 describe('dashboardReducer', () => {
   it('starts with no investigators and nothing to do', () => {

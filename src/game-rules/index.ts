@@ -1,2 +1,2 @@
-export { CHARACTERISTICS, type Characteristic } from './characteristics';
-export * from './investigator';
+export * from './configs';
+export * from './entities';
