@@ -27,8 +27,8 @@ into the VTT by hand. All data stays in the browser's localStorage.
 
 ```
 src/
-  client/      React UI (antd), providers and hooks
-  core/        Framework-free logic, including the Zustand store (zustand/vanilla)
+  client/      React UI (antd), stores, effects (side effects of commands), providers
+  core/        Pure logic: entities, per-display state, actions, commands and reducers
   game-rules/  7e rules data and types (characteristics, skills, occupations)
 ```
 
