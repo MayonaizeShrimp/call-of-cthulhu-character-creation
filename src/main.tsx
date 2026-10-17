@@ -1,3 +1,4 @@
+import 'antd/dist/reset.css';
 import { App } from '@client/App';
 import { AppProviders } from '@client/providers/AppProviders';
 import { StrictMode } from 'react';
