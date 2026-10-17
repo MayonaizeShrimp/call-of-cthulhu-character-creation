@@ -1,30 +1,20 @@
-import { CHARACTERISTICS } from '@game-rules/index';
-import { Card, Flex, Input, Layout, Tag, Typography } from 'antd';
-import { useCharacterStore } from './providers/CharacterStoreProvider';
+import { Layout, Typography } from 'antd';
+import { useRoutes } from 'react-router';
+import { appRoutes } from './App.routes';
+
+// The app is designed for mobile only; every page renders inside this column.
+const APP_MAX_WIDTH = 360;
 
 export function App() {
-  const name = useCharacterStore((state) => state.name);
-  const setName = useCharacterStore((state) => state.setName);
+  const routes = useRoutes(appRoutes);
 
   return (
     <Layout style={{ minHeight: '100vh' }}>
-      <Layout.Content style={{ padding: 24, maxWidth: 720, width: '100%', margin: '0 auto' }}>
-        <Typography.Title level={2}>Call of Cthulhu 7e — Character Creation</Typography.Title>
-        <Card title={`Hello, ${name || 'Investigator'}`}>
-          <Flex vertical gap="middle">
-            <Input
-              aria-label="Investigator name"
-              placeholder="Investigator name"
-              value={name}
-              onChange={(event) => setName(event.target.value)}
-            />
-            <Flex wrap gap="small">
-              {CHARACTERISTICS.map((characteristic) => (
-                <Tag key={characteristic}>{characteristic}</Tag>
-              ))}
-            </Flex>
-          </Flex>
-        </Card>
+      <Layout.Content
+        style={{ padding: 16, maxWidth: APP_MAX_WIDTH, width: '100%', margin: '0 auto' }}
+      >
+        <Typography.Title level={4}>Call of Cthulhu 7e — Character Creation</Typography.Title>
+        {routes}
       </Layout.Content>
     </Layout>
   );
