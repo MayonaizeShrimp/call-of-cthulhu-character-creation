@@ -17,9 +17,11 @@ export default defineConfig(({ command }) => ({
   },
   server: {
     port: 4200,
+    open: !process.env.CI,
   },
   preview: {
     port: 4300,
+    open: !process.env.CI,
   },
   build: {
     outDir: 'dist',

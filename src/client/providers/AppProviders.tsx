@@ -1,13 +1,22 @@
 import { App as AntContextProvider, ConfigProvider } from 'antd';
-import type { ReactNode } from 'react';
+import type { FC, ReactNode } from 'react';
+import { APP_THEME } from '../App.theme';
 import { CharacterStoreProvider } from './CharacterStoreProvider';
+import { type Datagateways, DatagatewaysProvider } from './DatagatewaysProvider';
 
-export function AppProviders({ children }: { children: ReactNode }) {
+type AppProviderProps = {
+  children: ReactNode;
+  datagateways?: Datagateways;
+};
+
+export const AppProviders: FC<AppProviderProps> = ({ children, datagateways }) => {
   return (
-    <ConfigProvider>
+    <ConfigProvider theme={APP_THEME}>
       <AntContextProvider>
-        <CharacterStoreProvider>{children}</CharacterStoreProvider>
+        <DatagatewaysProvider datagateways={datagateways}>
+          <CharacterStoreProvider>{children}</CharacterStoreProvider>
+        </DatagatewaysProvider>
       </AntContextProvider>
     </ConfigProvider>
   );
-}
+};

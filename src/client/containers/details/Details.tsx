@@ -1,16 +1,17 @@
+import { Content } from '@client/components/Content';
 import { useCharacterStore } from '@client/providers/CharacterStoreProvider';
 import { CHARACTERISTICS } from '@game-rules/index';
 import { Card, Flex, Input, Tag, Typography } from 'antd';
+import type { FC } from 'react';
 import { Link, useParams } from 'react-router';
 
-export function Details() {
-  // No id in the URL means we're creating a new investigator.
+export const Details: FC = () => {
   const { id } = useParams();
   const name = useCharacterStore((state) => state.name);
   const setName = useCharacterStore((state) => state.setName);
 
   return (
-    <Flex vertical gap="middle">
+    <Content>
       <Link to="/">Back to dashboard</Link>
       <Typography.Title level={3}>
         {id === undefined ? 'New investigator' : `Investigator ${id}`}
@@ -30,6 +31,6 @@ export function Details() {
           </Flex>
         </Flex>
       </Card>
-    </Flex>
+    </Content>
   );
-}
+};

@@ -33,7 +33,18 @@
   "linter": {
     "enabled": true,
     "rules": {
-      "preset": "recommended"
+      "preset": "recommended",
+      "correctness": {
+        "useExhaustiveDependencies": {
+          "level": "error",
+          "options": {
+            "hooks": [
+              { "name": "useDashboardDispatch", "stableResult": true },
+              { "name": "useDatagateways", "stableResult": true }
+            ]
+          }
+        }
+      }
     }
   },
   "overrides": [

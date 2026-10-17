@@ -20,15 +20,15 @@ into the VTT by hand. All data stays in the browser's localStorage.
 | `npm run test:watch`    | Run tests in watch mode                     |
 | `npm run test:coverage` | Tests with coverage report in `coverage/`   |
 | `npm run typecheck`     | TypeScript type check                       |
-| `npm run lint`          | Biome lint + format check                   |
-| `npm run check:fix`     | Apply Biome fixes and formatting            |
+| `npm run lint`          | Biome lint + format, applying safe fixes    |
+| `npm run lint:ci`       | Biome check only, no writes (used in CI)    |
 
 ## Structure
 
 ```
 src/
-  client/      React UI (antd), providers and hooks
-  core/        Framework-free logic, including the Zustand store (zustand/vanilla)
+  client/      React UI (antd), stores, effects (side effects of commands), providers
+  core/        Pure logic: entities, per-display state, actions, commands and reducers
   game-rules/  7e rules data and types (characteristics, skills, occupations)
 ```
 
@@ -38,8 +38,10 @@ Dependency direction is `client → core → game-rules`. Biome enforces it with
 
 ## Deployment
 
-`.github/workflows/deploy.yml` lints, type-checks, tests and builds on every push and pull
-request, and deploys `main` to GitHub Pages at `/call-of-cthulhu-character-creation/`.
+`.github/workflows/deploy.yml` runs on every push to `master` (or manually from the Actions
+tab): it lints, type-checks, tests and builds, then deploys to GitHub Pages at
+`/call-of-cthulhu-character-creation/`. Pull requests are not checked in CI; run
+`npm run lint && npm run typecheck && npm test` locally before merging.
 
 One-time setup: in the GitHub repository go to **Settings → Pages** and set
 **Source** to **GitHub Actions**.
