@@ -1,0 +1,14 @@
+{
+  "$schema": "./node_modules/nx/schemas/project-schema.json",
+  "name": "coc-character-creation",
+  "projectType": "application",
+  "sourceRoot": "src",
+  "tags": ["type:app"],
+  "targets": {
+    "test": {
+      "options": {
+        "command": "vitest run"
+      }
+    }
+  }
+}

@@ -1,0 +1,104 @@
+{
+  "$schema": "./node_modules/@biomejs/biome/configuration_schema.json",
+  "vcs": {
+    "enabled": true,
+    "clientKind": "git",
+    "useIgnoreFile": true
+  },
+  "files": {
+    "ignoreUnknown": true
+  },
+  "formatter": {
+    "enabled": true,
+    "indentStyle": "space",
+    "indentWidth": 2,
+    "lineWidth": 100
+  },
+  "javascript": {
+    "formatter": {
+      "quoteStyle": "single",
+      "jsxQuoteStyle": "double",
+      "semicolons": "always",
+      "trailingCommas": "all"
+    }
+  },
+  "assist": {
+    "enabled": true,
+    "actions": {
+      "source": {
+        "organizeImports": "on"
+      }
+    }
+  },
+  "linter": {
+    "enabled": true,
+    "rules": {
+      "preset": "recommended"
+    }
+  },
+  "overrides": [
+    {
+      "includes": ["src/game-rules/**"],
+      "linter": {
+        "rules": {
+          "style": {
+            "noRestrictedImports": {
+              "level": "error",
+              "options": {
+                "patterns": [
+                  {
+                    "group": [
+                      "@core",
+                      "@core/**",
+                      "**/core/**",
+                      "@client",
+                      "@client/**",
+                      "**/client/**"
+                    ],
+                    "message": "game-rules must not depend on core or client."
+                  },
+                  {
+                    "group": [
+                      "react",
+                      "react-dom",
+                      "react/**",
+                      "antd",
+                      "antd/**",
+                      "zustand",
+                      "zustand/**"
+                    ],
+                    "message": "game-rules is plain data and types; no UI or state libraries."
+                  }
+                ]
+              }
+            }
+          }
+        }
+      }
+    },
+    {
+      "includes": ["src/core/**"],
+      "linter": {
+        "rules": {
+          "style": {
+            "noRestrictedImports": {
+              "level": "error",
+              "options": {
+                "patterns": [
+                  {
+                    "group": ["@client", "@client/**", "**/client/**"],
+                    "message": "core must not depend on client."
+                  },
+                  {
+                    "group": ["react", "react-dom", "react/**", "antd", "antd/**", "zustand/react"],
+                    "message": "core is framework-free; use zustand/vanilla and keep React in client."
+                  }
+                ]
+              }
+            }
+          }
+        }
+      }
+    }
+  ]
+}

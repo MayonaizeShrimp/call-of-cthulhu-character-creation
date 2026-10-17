@@ -1,0 +1,20 @@
+# dependencies
+node_modules
+
+# build output
+dist
+coverage
+
+# nx
+.nx/cache
+.nx/workspace-data
+
+# logs
+*.log
+npm-debug.log*
+
+# editor / OS
+.DS_Store
+Thumbs.db
+.idea
+*.local
