@@ -20,8 +20,8 @@ into the VTT by hand. All data stays in the browser's localStorage.
 | `npm run test:watch`    | Run tests in watch mode                     |
 | `npm run test:coverage` | Tests with coverage report in `coverage/`   |
 | `npm run typecheck`     | TypeScript type check                       |
-| `npm run lint`          | Biome lint + format check                   |
-| `npm run check:fix`     | Apply Biome fixes and formatting            |
+| `npm run lint`          | Biome lint + format, applying safe fixes    |
+| `npm run lint:ci`       | Biome check only, no writes (used in CI)    |
 
 ## Structure
 

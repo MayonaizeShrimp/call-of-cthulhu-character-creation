@@ -17,11 +17,13 @@
     "test:watch": "vitest",
     "test:coverage": "vitest run --coverage",
     "typecheck": "nx typecheck coc-character-creation",
-    "lint": "biome check .",
-    "format": "biome format --write .",
-    "check:fix": "biome check --write ."
+    "lint": "biome check --write .",
+    "lint:ci": "biome ci .",
+    "format": "biome format --write ."
   },
   "dependencies": {
+    "@emotion/react": "^11.14.0",
+    "@emotion/styled": "^11.14.1",
     "antd": "^6.6.6",
     "react": "^19.3.1",
     "react-dom": "^19.3.1",
