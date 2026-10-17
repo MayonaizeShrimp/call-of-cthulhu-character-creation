@@ -38,8 +38,10 @@ Dependency direction is `client → core → game-rules`. Biome enforces it with
 
 ## Deployment
 
-`.github/workflows/deploy.yml` lints, type-checks, tests and builds on every push and pull
-request, and deploys `main` to GitHub Pages at `/call-of-cthulhu-character-creation/`.
+`.github/workflows/deploy.yml` runs on every push to `master` (or manually from the Actions
+tab): it lints, type-checks, tests and builds, then deploys to GitHub Pages at
+`/call-of-cthulhu-character-creation/`. Pull requests are not checked in CI; run
+`npm run lint && npm run typecheck && npm test` locally before merging.
 
 One-time setup: in the GitHub repository go to **Settings → Pages** and set
 **Source** to **GitHub Actions**.
