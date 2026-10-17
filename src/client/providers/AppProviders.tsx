@@ -1,9 +1,13 @@
 import { App as AntContextProvider, ConfigProvider } from 'antd';
-import type { ReactNode } from 'react';
+import type { FC, ReactNode } from 'react';
 import { APP_THEME } from '../App.theme';
 import { CharacterStoreProvider } from './CharacterStoreProvider';
 
-export function AppProviders({ children }: { children: ReactNode }) {
+type AppProviderProps = {
+  children: ReactNode;
+};
+
+export const AppProviders: FC<AppProviderProps> = ({ children }) => {
   return (
     <ConfigProvider theme={APP_THEME}>
       <AntContextProvider>
@@ -11,4 +15,4 @@ export function AppProviders({ children }: { children: ReactNode }) {
       </AntContextProvider>
     </ConfigProvider>
   );
-}
+};

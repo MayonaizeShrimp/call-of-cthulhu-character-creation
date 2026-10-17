@@ -1,9 +1,10 @@
 import { Content } from '@client/components/Content';
 import { Navbar } from '@client/components/Navbar';
 import { Button, Empty, Typography } from 'antd';
+import type { FC } from 'react';
 import { useNavigate } from 'react-router';
 
-export function Dashboard() {
+export const Dashboard: FC = () => {
   const navigate = useNavigate();
 
   return (
@@ -24,4 +25,4 @@ export function Dashboard() {
       </Content>
     </>
   );
-}
+};
