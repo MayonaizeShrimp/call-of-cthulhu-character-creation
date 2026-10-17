@@ -31,6 +31,8 @@ jobs:
       - run: npm run typecheck
       - run: npm test
       - run: npm run build
+      # GitHub Pages has no SPA fallback; serving the app as 404.html lets the router handle deep links.
+      - run: cp dist/index.html dist/404.html
 
       - if: github.event_name != 'pull_request'
         uses: actions/configure-pages@v6
