@@ -43,6 +43,18 @@ describe('InvestigatorDataGateway', () => {
     });
   });
 
+  describe('getInvestigator', () => {
+    it('returns the investigator with that id', async () => {
+      seed([harvey, lydia]);
+      await expect(InvestigatorDataGateway.getInvestigator('2')).resolves.toEqual(lydia);
+    });
+
+    it('returns undefined when there is no such investigator', async () => {
+      seed([harvey]);
+      await expect(InvestigatorDataGateway.getInvestigator('missing')).resolves.toBeUndefined();
+    });
+  });
+
   describe('upsertInvestigator', () => {
     it('creates an investigator with a new id when none is given', async () => {
       const saved = await InvestigatorDataGateway.upsertInvestigator(withoutId(harvey));

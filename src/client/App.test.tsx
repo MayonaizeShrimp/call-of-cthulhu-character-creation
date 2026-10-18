@@ -17,8 +17,8 @@ describe('App routing', () => {
     await user.click(screen.getByRole('button', { name: 'Create investigator' }));
     expect(screen.getByRole('heading', { name: 'New investigator' })).toBeInTheDocument();
 
-    await user.click(screen.getByRole('link', { name: 'Back to dashboard' }));
-    expect(screen.getByRole('heading', { name: 'Investigators' })).toBeInTheDocument();
+    await user.click(screen.getByRole('button', { name: 'Go back' }));
+    expect(await screen.findByRole('heading', { name: 'Investigators' })).toBeInTheDocument();
   });
 
   it('shows not found for unknown paths', () => {

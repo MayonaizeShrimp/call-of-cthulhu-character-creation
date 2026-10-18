@@ -16,6 +16,13 @@ Object.defineProperty(window, 'matchMedia', {
   })),
 });
 
+// antd's ellipsis and layout measuring rely on ResizeObserver, which jsdom does not implement.
+globalThis.ResizeObserver ??= class {
+  observe() {}
+  unobserve() {}
+  disconnect() {}
+};
+
 afterEach(() => {
   cleanup();
   localStorage.clear();

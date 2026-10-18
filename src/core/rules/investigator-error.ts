@@ -4,13 +4,15 @@ import type { Characteristic } from '@game-rules/index';
 // Why an investigator can't be saved. Each creator's key is its `type`.
 export const InvestigatorError = defineTagged({
   nameMissing: () => ({}),
+  occupationMissing: () => ({}),
+  characteristicMissing: (characteristic: Characteristic) => ({ characteristic }),
+  luckMissing: () => ({}),
   characteristicOutOfRange: (details: {
     characteristic: Characteristic;
     value: number;
     min: number;
     max: number;
   }) => details,
-  pointBuyTotalMismatch: (details: { expected: number; actual: number }) => details,
   luckOutOfRange: (details: { value: number; min: number; max: number }) => details,
   unknownSkill: (skillId: string) => ({ skillId }),
   duplicateSkill: (skillId: string) => ({ skillId }),

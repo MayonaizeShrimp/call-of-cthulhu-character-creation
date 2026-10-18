@@ -1,6 +1,7 @@
 export * from './characteristic';
 export * from './investigator';
 export * from './investigator.fixtures';
+export * from './investigator-draft';
 export * from './occupation';
 export * from './selected-characteristic';
 export * from './selected-occupation';
