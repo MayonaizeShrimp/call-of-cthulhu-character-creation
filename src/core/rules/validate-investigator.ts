@@ -1,11 +1,9 @@
 import {
+  CHARACTERISTIC_RANGE,
   CHARACTERISTICS,
-  CharacteristicMethod,
   type Investigator,
   LUCK_RANGE,
-  MANUAL_RANGE,
   type Occupation,
-  POINT_BUY,
   type SelectedOccupation,
   SKILL_MAX,
 } from '@game-rules/index';
@@ -14,40 +12,22 @@ import { InvestigatorError, type InvestigatorErrors } from './investigator-error
 import { findOccupation } from './occupations';
 import { findSkill, skillBase } from './skills';
 
-type ValidationOptions = {
-  characteristicMethod: CharacteristicMethod;
-};
-
 const inRange = (value: number, { min, max }: { min: number; max: number }) =>
   value >= min && value <= max;
 
 const hasDuplicates = (values: readonly string[]) => new Set(values).size !== values.length;
 
-const validateCharacteristics = (
-  investigator: Investigator,
-  { characteristicMethod }: ValidationOptions,
-): InvestigatorErrors[] => {
-  const range = characteristicMethod === CharacteristicMethod.pointBuy ? POINT_BUY : MANUAL_RANGE;
+const validateCharacteristics = (investigator: Investigator): InvestigatorErrors[] => {
   const errors: InvestigatorErrors[] = CHARACTERISTICS.filter(
-    (characteristic) => !inRange(investigator.characteristics[characteristic], range),
+    (characteristic) =>
+      !inRange(investigator.characteristics[characteristic], CHARACTERISTIC_RANGE),
   ).map((characteristic) =>
     InvestigatorError.characteristicOutOfRange({
       characteristic,
       value: investigator.characteristics[characteristic],
-      min: range.min,
-      max: range.max,
+      ...CHARACTERISTIC_RANGE,
     }),
   );
-
-  if (characteristicMethod === CharacteristicMethod.pointBuy) {
-    const actual = CHARACTERISTICS.reduce(
-      (total, characteristic) => total + investigator.characteristics[characteristic],
-      0,
-    );
-    if (actual !== POINT_BUY.total) {
-      errors.push(InvestigatorError.pointBuyTotalMismatch({ expected: POINT_BUY.total, actual }));
-    }
-  }
 
   if (!inRange(investigator.luck, LUCK_RANGE)) {
     errors.push(InvestigatorError.luckOutOfRange({ value: investigator.luck, ...LUCK_RANGE }));
@@ -118,15 +98,12 @@ const validateOccupationPicks = (
 };
 
 // Rules checked before saving. An empty list means the investigator can be saved.
-export const validateInvestigator = (
-  investigator: Investigator,
-  options: ValidationOptions,
-): InvestigatorErrors[] => {
+export const validateInvestigator = (investigator: Investigator): InvestigatorErrors[] => {
   const errors: InvestigatorErrors[] = [];
 
   if (investigator.name.trim() === '') errors.push(InvestigatorError.nameMissing());
 
-  errors.push(...validateCharacteristics(investigator, options));
+  errors.push(...validateCharacteristics(investigator));
   errors.push(...validateSkills(investigator));
 
   const occupation = findOccupation(investigator.occupation.occupationId);

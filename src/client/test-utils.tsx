@@ -26,6 +26,7 @@ export const createFakeDatagateways = (initial: Investigator[] = []): Datagatewa
   let investigators = [...initial];
   return {
     getInvestigators: async () => investigators,
+    getInvestigator: async (id) => investigators.find((investigator) => investigator.id === id),
     upsertInvestigator: async (input) => {
       const saved = { ...input, id: input.id ?? `fake-${investigators.length + 1}` };
       investigators = [...investigators.filter(({ id }) => id !== saved.id), saved];

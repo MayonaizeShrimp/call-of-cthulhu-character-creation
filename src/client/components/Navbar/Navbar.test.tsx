@@ -26,4 +26,19 @@ describe('Navbar', () => {
 
     expect(onClick).toHaveBeenCalledOnce();
   });
+
+  it('shows no buttons when there is no call-to-action or back handler', () => {
+    render(<Navbar title="Investigator" />);
+    expect(screen.queryByRole('button')).not.toBeInTheDocument();
+  });
+
+  it('shows a back button that calls onBack', async () => {
+    const user = userEvent.setup();
+    const onBack = vi.fn();
+    render(<Navbar title="Investigator" onBack={onBack} />);
+
+    await user.click(screen.getByRole('button', { name: 'Go back' }));
+
+    expect(onBack).toHaveBeenCalledOnce();
+  });
 });

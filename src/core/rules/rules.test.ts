@@ -46,23 +46,23 @@ describe('skills', () => {
 });
 
 describe('occupations', () => {
-  const journalist = findOccupation('journalist');
-  const detective = findOccupation('police-detective');
+  const jurnalistik = findOccupation('jurnalistik');
+  const sepakBola = findOccupation('sepak-bola');
 
   it('computes a single-characteristic formula (EDU × 4)', () => {
-    if (!journalist) throw new Error('missing journalist');
-    expect(occupationSkillPoints(journalist, characteristics, ['EDU'])).toBe(280);
+    if (!jurnalistik) throw new Error('missing jurnalistik');
+    expect(occupationSkillPoints(jurnalistik, characteristics, ['EDU'])).toBe(280);
   });
 
   it('uses the chosen characteristic for a choice formula (EDU × 2 + DEX/STR × 2)', () => {
-    if (!detective) throw new Error('missing detective');
-    expect(occupationSkillPoints(detective, characteristics, ['EDU', 'DEX'])).toBe(260);
-    expect(occupationSkillPoints(detective, characteristics, ['EDU', 'STR'])).toBe(240);
+    if (!sepakBola) throw new Error('missing sepak-bola');
+    expect(occupationSkillPoints(sepakBola, characteristics, ['EDU', 'DEX'])).toBe(260);
+    expect(occupationSkillPoints(sepakBola, characteristics, ['EDU', 'STR'])).toBe(240);
   });
 
   it('ignores a choice that is not allowed for that term', () => {
-    if (!detective) throw new Error('missing detective');
-    expect(occupationSkillPoints(detective, characteristics, ['EDU', 'APP'])).toBe(140);
+    if (!sepakBola) throw new Error('missing sepak-bola');
+    expect(occupationSkillPoints(sepakBola, characteristics, ['EDU', 'APP'])).toBe(140);
   });
 
   it('gives INT × 2 personal interest points', () => {
@@ -72,11 +72,11 @@ describe('occupations', () => {
   it('lists fixed occupation skills plus all picks', () => {
     expect(occupationSkillIds(investigator.occupation).sort()).toEqual(
       [
+        'art-craft-writing',
         'art-craft-photography',
-        'history',
         'library-use',
-        'language-own',
         'psychology',
+        'computer-use',
         'persuade',
         'spot-hidden',
         'listen',

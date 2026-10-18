@@ -2,11 +2,14 @@ import type { Characteristic } from '../entities/characteristic';
 
 export const CHARACTERISTICS = ['STR', 'CON', 'SIZ', 'DEX', 'APP', 'INT', 'POW', 'EDU'] as const;
 
-// Optional 7e rule: spend exactly this many points across the eight characteristics.
-export const POINT_BUY = { total: 460, min: 15, max: 90 } as const;
+// Allowed value for each characteristic, however the player got it (rolled or point-buy).
+export const CHARACTERISTIC_RANGE = { min: 1, max: 99 } as const;
 
-// Values typed in after rolling at the table.
-export const MANUAL_RANGE = { min: 1, max: 99 } as const;
+// Optional 7e point-buy pool. Shown to players as a guide only; not enforced.
+export const POINT_BUY_TOTAL = 460;
+
+// 7e quick-fire values: assign one to each characteristic. Adds up to POINT_BUY_TOTAL.
+export const POINT_BUY_VALUES = [80, 70, 60, 60, 50, 50, 50, 40] as const;
 
 export const LUCK_RANGE = { min: 1, max: 99 } as const;
 

@@ -1,62 +1,45 @@
-import { CharacteristicMethod, createTestInvestigator, type Investigator } from '@game-rules/index';
+import { createTestInvestigator, type Investigator } from '@game-rules/index';
 import { describe, expect, it } from 'vitest';
 import { InvestigatorError } from './investigator-error';
 import { validateInvestigator } from './validate-investigator';
-
-const pointBuy = { characteristicMethod: CharacteristicMethod.pointBuy };
-const manual = { characteristicMethod: CharacteristicMethod.manual };
 
 const valid = createTestInvestigator();
 const withOccupation = (occupation: Partial<Investigator['occupation']>) =>
   createTestInvestigator({ occupation: { ...valid.occupation, ...occupation } });
 
 describe('validateInvestigator', () => {
-  it('accepts a valid investigator with either characteristic method', () => {
-    expect(validateInvestigator(valid, pointBuy)).toEqual([]);
-    expect(validateInvestigator(valid, manual)).toEqual([]);
+  it('accepts a valid investigator', () => {
+    expect(validateInvestigator(valid)).toEqual([]);
   });
 
   it('requires a name', () => {
-    expect(validateInvestigator(createTestInvestigator({ name: '  ' }), manual)).toEqual([
+    expect(validateInvestigator(createTestInvestigator({ name: '  ' }))).toEqual([
       InvestigatorError.nameMissing(),
     ]);
   });
 
   describe('characteristics', () => {
-    it('limits point-buy values to 15–90 and the total to exactly 460', () => {
+    it('accepts any values within 1–99, with no point-buy total', () => {
       const investigator = createTestInvestigator({
-        characteristics: { ...valid.characteristics, STR: 10, CON: 95 }, // total 460 - 40 + 35 = 455
+        characteristics: { ...valid.characteristics, STR: 1, CON: 99 },
       });
-      expect(validateInvestigator(investigator, pointBuy)).toEqual([
-        InvestigatorError.characteristicOutOfRange({
-          characteristic: 'STR',
-          value: 10,
-          min: 15,
-          max: 90,
-        }),
-        InvestigatorError.characteristicOutOfRange({
-          characteristic: 'CON',
-          value: 95,
-          min: 15,
-          max: 90,
-        }),
-        InvestigatorError.pointBuyTotalMismatch({ expected: 460, actual: 455 }),
-      ]);
+      expect(validateInvestigator(investigator)).toEqual([]);
     });
 
-    it('only requires 1–99 for manually entered values, with no total', () => {
+    it('limits each characteristic to 1–99', () => {
       const investigator = createTestInvestigator({
-        characteristics: { ...valid.characteristics, STR: 10, CON: 95 },
+        characteristics: { ...valid.characteristics, STR: 0, CON: 100 },
       });
-      expect(validateInvestigator(investigator, manual)).toEqual([]);
-
-      const outOfRange = createTestInvestigator({
-        characteristics: { ...valid.characteristics, STR: 0 },
-      });
-      expect(validateInvestigator(outOfRange, manual)).toEqual([
+      expect(validateInvestigator(investigator)).toEqual([
         InvestigatorError.characteristicOutOfRange({
           characteristic: 'STR',
           value: 0,
+          min: 1,
+          max: 99,
+        }),
+        InvestigatorError.characteristicOutOfRange({
+          characteristic: 'CON',
+          value: 100,
           min: 1,
           max: 99,
         }),
@@ -64,7 +47,7 @@ describe('validateInvestigator', () => {
     });
 
     it('limits luck to 1–99', () => {
-      expect(validateInvestigator(createTestInvestigator({ luck: 100 }), manual)).toEqual([
+      expect(validateInvestigator(createTestInvestigator({ luck: 100 }))).toEqual([
         InvestigatorError.luckOutOfRange({ value: 100, min: 1, max: 99 }),
       ]);
     });
@@ -79,7 +62,7 @@ describe('validateInvestigator', () => {
           { skillId: 'charm', value: 25 },
         ],
       });
-      expect(validateInvestigator(investigator, manual)).toEqual([
+      expect(validateInvestigator(investigator)).toEqual([
         InvestigatorError.unknownSkill('cthulhu-mythos'),
         InvestigatorError.duplicateSkill('charm'),
       ]);
@@ -92,7 +75,7 @@ describe('validateInvestigator', () => {
           { skillId: 'charm', value: 100 },
         ],
       });
-      expect(validateInvestigator(investigator, manual)).toEqual([
+      expect(validateInvestigator(investigator)).toEqual([
         InvestigatorError.skillBelowBase({ skillId: 'dodge', value: 20, base: 30 }),
         InvestigatorError.skillAboveMax({ skillId: 'charm', value: 100, max: 99 }),
         // charm 15 → 100 = 85 points, under the 400 budget
@@ -103,16 +86,16 @@ describe('validateInvestigator', () => {
   describe('occupation', () => {
     it('rejects an unknown occupation', () => {
       const investigator = withOccupation({ occupationId: 'pirate' as never });
-      expect(validateInvestigator(investigator, manual)).toEqual([
+      expect(validateInvestigator(investigator)).toEqual([
         InvestigatorError.unknownOccupation('pirate'),
       ]);
     });
 
     it('requires an allowed characteristic for each formula term', () => {
-      expect(
-        validateInvestigator(withOccupation({ pointCharacteristics: ['APP'] }), manual),
-      ).toEqual([InvestigatorError.invalidPointCharacteristic(0)]);
-      expect(validateInvestigator(withOccupation({ pointCharacteristics: [] }), manual)).toEqual([
+      expect(validateInvestigator(withOccupation({ pointCharacteristics: ['APP'] }))).toEqual([
+        InvestigatorError.invalidPointCharacteristic(0),
+      ]);
+      expect(validateInvestigator(withOccupation({ pointCharacteristics: [] }))).toEqual([
         InvestigatorError.invalidPointCharacteristic(0),
       ]);
     });
@@ -124,7 +107,7 @@ describe('validateInvestigator', () => {
       ['a missing choice group', []],
     ])('rejects a skill choice with %s', (_, choiceSkillIds) => {
       const investigator = withOccupation({ choiceSkillIds: choiceSkillIds as never });
-      expect(validateInvestigator(investigator, manual)).toContainEqual(
+      expect(validateInvestigator(investigator)).toContainEqual(
         InvestigatorError.skillChoiceIncomplete(0),
       );
     });
@@ -132,14 +115,12 @@ describe('validateInvestigator', () => {
     it.each([
       ['too few picks', ['spot-hidden']],
       ['duplicate picks', ['spot-hidden', 'spot-hidden']],
-      ['a pick that is already an occupation skill', ['spot-hidden', 'history']],
+      ['a pick that is already an occupation skill', ['spot-hidden', 'library-use']],
       ['a pick that is already a chosen skill', ['spot-hidden', 'persuade']],
       ['an unknown skill', ['spot-hidden', 'cthulhu-mythos']],
     ])('rejects "any other" skills with %s', (_, anySkillIds) => {
       const investigator = withOccupation({ anySkillIds: anySkillIds as never });
-      expect(validateInvestigator(investigator, manual)).toEqual([
-        InvestigatorError.anySkillsIncomplete(),
-      ]);
+      expect(validateInvestigator(investigator)).toEqual([InvestigatorError.anySkillsIncomplete()]);
     });
   });
 
@@ -154,7 +135,7 @@ describe('validateInvestigator', () => {
         { skillId: 'appraise', value: 99 }, // 94
       ],
     });
-    expect(validateInvestigator(investigator, manual)).toEqual([
+    expect(validateInvestigator(investigator)).toEqual([
       InvestigatorError.overBudget({ budget: 400, spent: 460 }),
     ]);
   });

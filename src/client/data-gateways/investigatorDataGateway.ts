@@ -38,6 +38,9 @@ const writeAll = (investigators: Investigator[]) => {
 export const InvestigatorDataGateway = {
   getInvestigators: async (): Promise<Investigator[]> => readAll(),
 
+  getInvestigator: async (id: string): Promise<Investigator | undefined> =>
+    readAll().find((investigator) => investigator.id === id),
+
   upsertInvestigator: async (input: UpsertInvestigatorRequest): Promise<Investigator> => {
     const investigator: Investigator = { ...input, id: input.id ?? crypto.randomUUID() };
     const investigators = readAll();

@@ -1,5 +1,10 @@
 import { describe, expect, it } from 'vitest';
-import { CHARACTERISTICS, POINT_BUY } from './characteristics';
+import {
+  CHARACTERISTIC_RANGE,
+  CHARACTERISTICS,
+  POINT_BUY_TOTAL,
+  POINT_BUY_VALUES,
+} from './characteristics';
 import { OCCUPATIONS } from './occupations';
 import { SKILLS } from './skills';
 
@@ -12,9 +17,16 @@ describe('CHARACTERISTICS', () => {
     );
   });
 
-  it('allows a point-buy spread that fits the per-characteristic limits', () => {
-    expect(CHARACTERISTICS.length * POINT_BUY.min).toBeLessThanOrEqual(POINT_BUY.total);
-    expect(CHARACTERISTICS.length * POINT_BUY.max).toBeGreaterThanOrEqual(POINT_BUY.total);
+  it('allows spending the whole point-buy pool within the characteristic range', () => {
+    expect(CHARACTERISTICS.length * CHARACTERISTIC_RANGE.min).toBeLessThanOrEqual(POINT_BUY_TOTAL);
+    expect(CHARACTERISTICS.length * CHARACTERISTIC_RANGE.max).toBeGreaterThanOrEqual(
+      POINT_BUY_TOTAL,
+    );
+  });
+
+  it('offers one point-buy value per characteristic, adding up to the pool', () => {
+    expect(POINT_BUY_VALUES).toHaveLength(CHARACTERISTICS.length);
+    expect(POINT_BUY_VALUES.reduce((sum, value) => sum + value, 0)).toBe(POINT_BUY_TOTAL);
   });
 });
 

@@ -1,11 +1,11 @@
 import type { Investigator } from './investigator';
 
-// A valid Journalist built with point-buy (460 points), for tests.
+// A valid Jurnalistik (School Press) member, for tests.
 export const createTestInvestigator = (overrides: Partial<Investigator> = {}): Investigator => ({
   id: 'test-investigator',
   name: 'Test Investigator',
   occupation: {
-    occupationId: 'journalist',
+    occupationId: 'jurnalistik',
     pointCharacteristics: ['EDU'],
     choiceSkillIds: [['persuade']],
     anySkillIds: ['spot-hidden', 'listen'],
